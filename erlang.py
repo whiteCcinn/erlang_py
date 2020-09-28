@@ -126,13 +126,13 @@ class OtpErlangAtom(object):
             length = len(value_encoded)
             if length <= 255:
                 return (
-                    b_chr(_TAG_SMALL_ATOM_UTF8_EXT) +
-                    b_chr(length) + value_encoded
+                        b_chr(_TAG_ATOM_EXT) +
+                        struct.pack(b'>H', length) + self.value
                 )
             elif length <= 65535:
                 return (
-                    b_chr(_TAG_ATOM_UTF8_EXT) +
-                    struct.pack(b'>H', length) + value_encoded
+                        b_chr(_TAG_SMALL_ATOM_EXT) +
+                        struct.pack(b'>B', length) + self.value
                 )
             else:
                 raise OutputException('uint16 overflow')
